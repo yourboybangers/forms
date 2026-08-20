@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CAZ × AI — the questionnaire</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#111111;--paper:#FAFAF6;--acid:#FF4D00;--hair:rgba(17,17,17,.18)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:"Space Mono","Courier New",monospace;font-size:14px;line-height:1.6}
+  .wrap{max-width:760px;margin:0 auto;padding:70px 32px 120px}
+  @media(max-width:640px){.wrap{padding:44px 18px 90px}}
+  .kicker{font-size:11px;letter-spacing:4px;color:var(--acid);margin-bottom:14px}
+  h1{font-family:"Archivo Black",sans-serif;font-size:clamp(44px,10vw,92px);line-height:.88;letter-spacing:-3px;text-transform:uppercase}
+  h1 em{font-style:normal;color:var(--acid)}
+  .strap{display:flex;gap:28px;flex-wrap:wrap;margin:26px 0 0;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:12px 0}
+  .strap div{font-size:12px}
+  .strap b{display:block;font-size:10px;letter-spacing:2px;color:var(--acid)}
+  .intro{margin-top:26px;border:3px solid var(--ink);padding:22px 24px;font-size:14px}
+  .intro b{color:var(--acid)}
+  section{margin-top:64px}
+  h2{font-family:"Archivo Black",sans-serif;font-size:24px;text-transform:uppercase;letter-spacing:-.5px;margin-bottom:4px}
+  h2 .no{color:var(--acid);margin-right:10px}
+  .sub{font-size:11px;letter-spacing:2px;margin-bottom:18px;opacity:.65}
+  .q{padding:16px 0;border-bottom:1px solid var(--hair)}
+  .q .l{display:block;font-size:13px;line-height:1.55;padding-left:26px;position:relative;margin-bottom:10px}
+  .q .l::before{content:"→";position:absolute;left:0;color:var(--acid);font-weight:700}
+  .q .hint{display:block;font-size:11px;opacity:.6;margin-top:2px}
+  textarea{display:block;width:100%;border:2px solid var(--ink);background:#fff;color:var(--ink);
+    font-family:"Space Mono","Courier New",monospace;font-size:16px;line-height:1.5;
+    padding:12px 14px;min-height:76px;resize:none;overflow:hidden;border-radius:0}
+  textarea:focus{outline:none;border-color:var(--acid)}
+  textarea::placeholder{color:rgba(17,17,17,.35)}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opts label{display:flex;align-items:flex-start;gap:12px;border:2px solid var(--ink);background:#fff;padding:10px 12px;font-size:14px;cursor:pointer;line-height:1.4}
+  .opts label:has(input:checked){background:var(--ink);color:#fff;border-color:var(--ink)}
+  .opts input{appearance:none;width:18px;height:18px;border:2px solid var(--acid);flex:none;margin-top:2px;background:#fff;border-radius:0}
+  .opts input[type=radio]{border-radius:50%}
+  .opts input:checked{background:var(--acid)}
+  .opts.row{flex-direction:row;flex-wrap:wrap}
+  .opts.row label{flex:1 1 auto;justify-content:center;text-align:center;min-width:90px}
+  .opts + textarea{margin-top:10px;min-height:56px}
+  .savebar{margin-top:70px}
+  #saveBtn{display:block;width:100%;background:var(--acid);color:#fff;border:none;cursor:pointer;
+    font-family:"Archivo Black","Arial Black",sans-serif;font-size:20px;text-transform:uppercase;letter-spacing:1px;padding:20px;border-radius:0}
+  #saveBtn:active{background:var(--ink)}
+  #saveStatus{margin-top:12px;font-size:12px;letter-spacing:1px;color:var(--acid);min-height:20px;text-align:center}
+  .privnote{margin-top:34px;border:3px solid var(--acid);padding:16px 20px;font-size:12px;color:var(--acid);font-weight:700}
+  .foot{margin-top:60px;border-top:3px solid var(--ink);padding-top:12px;font-size:10px;letter-spacing:2px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  #gate{position:fixed;inset:0;background:var(--paper);z-index:10;display:flex;align-items:center;justify-content:center;padding:24px}
+  #gate .box{width:100%;max-width:420px}
+  #gate h1{font-size:clamp(40px,9vw,64px);margin-bottom:26px}
+  #gateCode{display:block;width:100%;border:3px solid var(--ink);background:#fff;color:var(--ink);
+    font-family:"Space Mono",monospace;font-size:20px;letter-spacing:5px;text-transform:uppercase;padding:16px;text-align:center;border-radius:0}
+  #gateCode:focus{outline:none;border-color:var(--acid)}
+  #gateBtn{display:block;width:100%;margin-top:14px;background:var(--ink);color:#fff;border:none;cursor:pointer;
+    font-family:"Archivo Black",sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:2px;padding:16px;border-radius:0}
+  #gateBtn:active{background:var(--acid)}
+  #gateErr{margin-top:12px;font-size:12px;letter-spacing:1px;color:var(--acid);min-height:18px;text-align:center}
+  #main{display:none}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="box">
+    <div class="kicker">PRIVATE — FOR CAZ</div>
+    <h1>Caz<br>× <em>AI</em></h1>
+    <input id="gateCode" type="text" placeholder="PASSCODE" autocomplete="off" autocapitalize="characters">
+    <button id="gateBtn">Enter</button>
+    <div id="gateErr"></div>
+  </div>
+</div>
+
+<div id="main"><div class="wrap">
+  <div class="kicker">CAZ × AI · 20 AUG 2026</div>
+  <h1>Where could <em>AI</em> actually help?</h1>
+  <div class="strap">
+    <div><b>FOR</b>CAZ</div>
+    <div><b>FROM</b>ALEX</div>
+    <div><b>SECTIONS</b>8 — 15 MINS, OR LESS</div>
+  </div>
+  <div class="intro">
+    Not a sales pitch. I've been building tools that run bits of my own life
+    (admin, money, messages, a house) and I want to know where the same thing
+    would actually help <b>you</b> — composing, producing, the freelance grind,
+    the studio. Tick what fits, type where you want. <b>It saves as you go</b>,
+    so dip in and out. Messy answers are the good ones.
+  </div>
+
+  <section>
+    <h2><span class="no">01</span>Your week</h2>
+    <div class="sub">SECTION 1 OF 8</div>
+    <div class="q"><span class="l">Which hats are you wearing right now? <span class="hint">tick all that apply</span></span>
+      <div class="opts">
+        <label><input type="checkbox" data-k="s1_hats" value="composing (film/tv/ads/library)">composing — film / TV / ads / library</label>
+        <label><input type="checkbox" data-k="s1_hats" value="producing other artists">producing other artists</label>
+        <label><input type="checkbox" data-k="s1_hats" value="own artist project">my own artist project</label>
+        <label><input type="checkbox" data-k="s1_hats" value="session/live playing">session / live playing</label>
+        <label><input type="checkbox" data-k="s1_hats" value="mixing/mastering">mixing / mastering for others</label>
+        <label><input type="checkbox" data-k="s1_hats" value="studio hire">renting out the studio</label>
+        <label><input type="checkbox" data-k="s1_hats" value="teaching">teaching</label>
+        <label><input type="checkbox" data-k="s1_hats" value="other">something else (say below)</label>
+      </div>
+      <textarea data-k="s1_hats_other" placeholder="anything else…"></textarea>
+    </div>
+    <div class="q"><span class="l">Roughly how is a normal week split between making music and everything around it (admin, emails, chasing, booking, promo)?</span>
+      <div class="opts row">
+        <label><input type="radio" name="s1_split" data-k="s1_split" value="90/10">90 / 10</label>
+        <label><input type="radio" name="s1_split" data-k="s1_split" value="70/30">70 / 30</label>
+        <label><input type="radio" name="s1_split" data-k="s1_split" value="50/50">50 / 50</label>
+        <label><input type="radio" name="s1_split" data-k="s1_split" value="30/70">30 / 70</label>
+        <label><input type="radio" name="s1_split" data-k="s1_split" value="it's all admin">it's all admin, help</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">What's the one recurring job you'd hand to someone else tomorrow if you could?</span><textarea data-k="s1_handoff"></textarea></div>
+  </section>
+
+  <section>
+    <h2><span class="no">02</span>Composing &amp; producing</h2>
+    <div class="sub">SECTION 2 OF 8</div>
+    <div class="q"><span class="l">Where do you stand on AI anywhere near the actual music?</span>
+      <div class="opts">
+        <label><input type="radio" name="s2_stance" data-k="s2_stance" value="nowhere near the music">nowhere near the music — keep it to admin</label>
+        <label><input type="radio" name="s2_stance" data-k="s2_stance" value="tools around the music ok">tools around the music are fine (stem separation, tidy-up, reference matching, organising samples)</label>
+        <label><input type="radio" name="s2_stance" data-k="s2_stance" value="sketching/ideas ok">happy for it to throw ideas / sketches at me that I then make mine</label>
+        <label><input type="radio" name="s2_stance" data-k="s2_stance" value="all in">all in, show me everything</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">Which of these would actually save you hours? <span class="hint">tick all that apply</span></span>
+      <div class="opts">
+        <label><input type="checkbox" data-k="s2_tasks" value="brief decoding">turning a vague client brief into a clear spec + questions back to them</label>
+        <label><input type="checkbox" data-k="s2_tasks" value="cue sheets / metadata">cue sheets, metadata, PRS/PPL registrations, stems naming</label>
+        <label><input type="checkbox" data-k="s2_tasks" value="sample/library organisation">organising the sample library / project archive so you can find things</label>
+        <label><input type="checkbox" data-k="s2_tasks" value="revision tracking">tracking revisions and client notes across versions</label>
+        <label><input type="checkbox" data-k="s2_tasks" value="session prep">session prep — templates, patch lists, track sheets</label>
+        <label><input type="checkbox" data-k="s2_tasks" value="reference/research">reference research — "find me 10 tracks that do X"</label>
+        <label><input type="checkbox" data-k="s2_tasks" value="none">honestly none of these</label>
+      </div>
+      <textarea data-k="s2_tasks_other" placeholder="anything missing from the list…"></textarea>
+    </div>
+    <div class="q"><span class="l">What's your DAW / core setup, and what's the most annoying bit of the workflow around it?</span><textarea data-k="s2_setup"></textarea></div>
+  </section>
+
+  <section>
+    <h2><span class="no">03</span>Clients &amp; money</h2>
+    <div class="sub">SECTION 3 OF 8</div>
+    <div class="q"><span class="l">How do you invoice today?</span>
+      <div class="opts">
+        <label><input type="radio" name="s3_invoicing" data-k="s3_invoicing" value="accounting software">accounting software (Xero / QuickBooks / FreeAgent…)</label>
+        <label><input type="radio" name="s3_invoicing" data-k="s3_invoicing" value="template doc">a Word / Pages / Google Docs template</label>
+        <label><input type="radio" name="s3_invoicing" data-k="s3_invoicing" value="bank app">straight from the bank app</label>
+        <label><input type="radio" name="s3_invoicing" data-k="s3_invoicing" value="chaos">it's chaos, honestly</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">Which money jobs hurt most? <span class="hint">tick all that apply</span></span>
+      <div class="opts">
+        <label><input type="checkbox" data-k="s3_pain" value="raising invoices">raising invoices</label>
+        <label><input type="checkbox" data-k="s3_pain" value="chasing late payment">chasing late payments</label>
+        <label><input type="checkbox" data-k="s3_pain" value="quoting">quoting / knowing what to charge</label>
+        <label><input type="checkbox" data-k="s3_pain" value="expenses/receipts">expenses and receipts</label>
+        <label><input type="checkbox" data-k="s3_pain" value="tax return">the tax return</label>
+        <label><input type="checkbox" data-k="s3_pain" value="royalties">royalty statements / PRS / knowing what you're owed</label>
+        <label><input type="checkbox" data-k="s3_pain" value="contracts">contracts and terms</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">Would you let a system draft a polite chaser to a late-paying client for you to approve and send?</span>
+      <div class="opts row">
+        <label><input type="radio" name="s3_chaser" data-k="s3_chaser" value="yes">yes please</label>
+        <label><input type="radio" name="s3_chaser" data-k="s3_chaser" value="draft only">draft only, I'll rewrite</label>
+        <label><input type="radio" name="s3_chaser" data-k="s3_chaser" value="no">no, that's personal</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">How do new clients find you, and how do you keep track of leads / conversations / who owes you a reply?</span><textarea data-k="s3_leads"></textarea></div>
+  </section>
+
+  <section>
+    <h2><span class="no">04</span>The studio</h2>
+    <div class="sub">SECTION 4 OF 8</div>
+    <div class="q"><span class="l">How does a studio booking happen today, start to finish?</span><span class="hint" style="padding-left:26px">enquiry → price → date → deposit → access → after</span><textarea data-k="s4_flow"></textarea></div>
+    <div class="q"><span class="l">Where do bookings live?</span>
+      <div class="opts">
+        <label><input type="radio" name="s4_calendar" data-k="s4_calendar" value="google calendar">Google / Apple calendar</label>
+        <label><input type="radio" name="s4_calendar" data-k="s4_calendar" value="whatsapp threads">WhatsApp threads and memory</label>
+        <label><input type="radio" name="s4_calendar" data-k="s4_calendar" value="booking platform">a booking platform (say which below)</label>
+        <label><input type="radio" name="s4_calendar" data-k="s4_calendar" value="notebook">a notebook / wall planner</label>
+      </div>
+      <textarea data-k="s4_calendar_other" placeholder="which one / anything else…"></textarea>
+    </div>
+    <div class="q"><span class="l">What would you want automated around the studio? <span class="hint">tick all that apply</span></span>
+      <div class="opts">
+        <label><input type="checkbox" data-k="s4_auto" value="enquiry replies">first replies to enquiries (rates, availability, what's in the room)</label>
+        <label><input type="checkbox" data-k="s4_auto" value="availability page">a simple page showing availability + a request button</label>
+        <label><input type="checkbox" data-k="s4_auto" value="deposits/payments">deposits and payments</label>
+        <label><input type="checkbox" data-k="s4_auto" value="access/house rules msg">access instructions + house rules message before each session</label>
+        <label><input type="checkbox" data-k="s4_auto" value="gear list/inventory">gear list / inventory that's always current</label>
+        <label><input type="checkbox" data-k="s4_auto" value="reminders/follow-up">reminders and "thanks, come again" follow-ups</label>
+        <label><input type="checkbox" data-k="s4_auto" value="nothing">nothing — it's fine as it is</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">What goes wrong with hires? No-shows, overruns, mess, gear walking, price haggling…</span><textarea data-k="s4_wrong"></textarea></div>
+  </section>
+
+  <section>
+    <h2><span class="no">05</span>Messages &amp; inbox</h2>
+    <div class="sub">SECTION 5 OF 8</div>
+    <div class="q"><span class="l">Where does work actually arrive?</span>
+      <div class="opts row">
+        <label><input type="checkbox" data-k="s5_channels" value="email">email</label>
+        <label><input type="checkbox" data-k="s5_channels" value="whatsapp">WhatsApp</label>
+        <label><input type="checkbox" data-k="s5_channels" value="instagram dms">Instagram DMs</label>
+        <label><input type="checkbox" data-k="s5_channels" value="phone calls">phone calls</label>
+        <label><input type="checkbox" data-k="s5_channels" value="in person">in person / word of mouth</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">If something read your messages (privately, on your own machine) and just gave you a daily list of "these need a reply, these are tasks, this one's a booking" — how would that land?</span>
+      <div class="opts">
+        <label><input type="radio" name="s5_sweep" data-k="s5_sweep" value="yes">yes, that's the dream</label>
+        <label><input type="radio" name="s5_sweep" data-k="s5_sweep" value="work only">only for work accounts, not personal</label>
+        <label><input type="radio" name="s5_sweep" data-k="s5_sweep" value="uneasy">uneasy about anything reading my messages</label>
+        <label><input type="radio" name="s5_sweep" data-k="s5_sweep" value="no">hard no</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">What do you forget most often? (replies, follow-ups, sending files, invoicing, birthdays, renewals…)</span><textarea data-k="s5_forget"></textarea></div>
+  </section>
+
+  <section>
+    <h2><span class="no">06</span>Getting heard</h2>
+    <div class="sub">SECTION 6 OF 8</div>
+    <div class="q"><span class="l">How do you feel about promo — socials, newsletters, pitching to supervisors / labels / playlists?</span>
+      <div class="opts row">
+        <label><input type="radio" name="s6_promo" data-k="s6_promo" value="enjoy it">enjoy it</label>
+        <label><input type="radio" name="s6_promo" data-k="s6_promo" value="do it, hate it">do it, hate it</label>
+        <label><input type="radio" name="s6_promo" data-k="s6_promo" value="avoid it">avoid it</label>
+        <label><input type="radio" name="s6_promo" data-k="s6_promo" value="n/a">not relevant to me</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">Which would you actually use? <span class="hint">tick all that apply</span></span>
+      <div class="opts">
+        <label><input type="checkbox" data-k="s6_use" value="pitch research">research — who's commissioning / which supervisors / which libraries, with contacts</label>
+        <label><input type="checkbox" data-k="s6_use" value="pitch drafts">pitch email drafts in your voice</label>
+        <label><input type="checkbox" data-k="s6_use" value="a simple site">a simple, good-looking site / EPK / rate card that stays up to date</label>
+        <label><input type="checkbox" data-k="s6_use" value="social repurposing">turning one session / release into a week of posts</label>
+        <label><input type="checkbox" data-k="s6_use" value="none">none of that, thanks</label>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">07</span>Lines you won't cross</h2>
+    <div class="sub">SECTION 7 OF 8</div>
+    <div class="q"><span class="l">What must always be you, never a machine?</span><textarea data-k="s7_neverai"></textarea></div>
+    <div class="q"><span class="l">How much do you want to see of what a system does for you?</span>
+      <div class="opts">
+        <label><input type="radio" name="s7_visibility" data-k="s7_visibility" value="everything">everything, every time</label>
+        <label><input type="radio" name="s7_visibility" data-k="s7_visibility" value="approve sends">just let me approve anything that goes out to a person</label>
+        <label><input type="radio" name="s7_visibility" data-k="s7_visibility" value="exceptions only">only tell me when something's off</label>
+      </div>
+    </div>
+    <div class="q"><span class="l">Comfort with your own data (emails, bank, files) being read by tools running on your own computer — versus sent to a cloud service?</span>
+      <div class="opts">
+        <label><input type="radio" name="s7_data" data-k="s7_data" value="local ok, cloud ok">fine with both</label>
+        <label><input type="radio" name="s7_data" data-k="s7_data" value="local only">on my own machine only</label>
+        <label><input type="radio" name="s7_data" data-k="s7_data" value="work data only">work stuff only, never personal</label>
+        <label><input type="radio" name="s7_data" data-k="s7_data" value="need to understand first">I'd need to understand it properly first</label>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">08</span>You &amp; your kit</h2>
+    <div class="sub">SECTION 8 OF 8</div>
+    <div class="q"><span class="l">Phone + computer, and the apps you live in</span>
+      <div class="opts row">
+        <label><input type="checkbox" data-k="s8_kit" value="mac">Mac</label>
+        <label><input type="checkbox" data-k="s8_kit" value="windows">Windows</label>
+        <label><input type="checkbox" data-k="s8_kit" value="iphone">iPhone</label>
+        <label><input type="checkbox" data-k="s8_kit" value="android">Android</label>
+        <label><input type="checkbox" data-k="s8_kit" value="gmail">Gmail</label>
+        <label><input type="checkbox" data-k="s8_kit" value="icloud/apple mail">Apple Mail</label>
+        <label><input type="checkbox" data-k="s8_kit" value="notion">Notion</label>
+        <label><input type="checkbox" data-k="s8_kit" value="google drive">Google Drive</label>
+        <label><input type="checkbox" data-k="s8_kit" value="dropbox">Dropbox</label>
+      </div>
+      <textarea data-k="s8_kit_other" placeholder="anything else you rely on…"></textarea>
+    </div>
+    <div class="q"><span class="l">Have you used ChatGPT / Claude / anything like it? What for, and what put you off (if anything)?</span><textarea data-k="s8_used"></textarea></div>
+    <div class="q"><span class="l">If I built you ONE thing in the next month — what should it be?</span><textarea data-k="s8_onething"></textarea></div>
+    <div class="q"><span class="l">Anything I haven't asked that matters?</span><textarea data-k="s8_anything"></textarea></div>
+  </section>
+
+  <div class="savebar">
+    <button id="saveBtn">Save answers</button>
+    <div id="saveStatus"></div>
+  </div>
+  <div class="privnote">Private between you and Alex. Nothing here goes anywhere else. Answers save automatically as you type and you can come back any time with the same code.</div>
+  <div class="foot"><span>CAZ × AI</span><span>ALEX · AUG 2026</span></div>
+</div></div>
+
+<script>
+(function(){
+  var API = 'https://xzokqdhtkczxduxmtpbk.supabase.co/functions/v1/questionnaire';
+  var SLUG = 'caz', STORE = 'caz-ai-q';
+  var CODE = (new URLSearchParams(location.search).get('code') || sessionStorage.getItem(STORE+'-code') || '').toUpperCase();
+  var $ = function(s,el){ return (el||document).querySelector(s); };
+  var $$ = function(s,el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); };
+
+  function collect(){
+    var out = {};
+    $$('textarea[data-k]').forEach(function(t){ out[t.dataset.k] = t.value; });
+    var groups = {};
+    $$('input[data-k]').forEach(function(i){
+      var k = i.dataset.k; groups[k] = groups[k] || [];
+      if (i.checked) groups[k].push(i.value);
+    });
+    Object.keys(groups).forEach(function(k){ out[k] = groups[k].join(' | '); });
+    return out;
+  }
+  function restore(a){
+    Object.keys(a).forEach(function(k){
+      var v = a[k] || '';
+      $$('textarea[data-k="'+k+'"]').forEach(function(t){ t.value = v; grow(t); });
+      var vals = v.split(' | ');
+      $$('input[data-k="'+k+'"]').forEach(function(i){ i.checked = vals.indexOf(i.value) >= 0; });
+    });
+  }
+  function grow(t){ t.style.height='auto'; t.style.height=(t.scrollHeight+4)+'px'; }
+
+  var timer=null, status=$('#saveStatus');
+  function save(manual){
+    var data = collect();
+    localStorage.setItem(STORE, JSON.stringify(data));
+    status.textContent = 'saving…';
+    return fetch(API+'/save', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({code:CODE, slug:SLUG, answers:data})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ status.textContent = j.ok ? (manual ? 'saved — thank you ✓' : 'saved ✓') : 'could not save — check connection'; })
+      .catch(function(){ status.textContent = 'offline — kept on this device, will retry'; });
+  }
+  function queue(){ clearTimeout(timer); timer = setTimeout(function(){ save(false); }, 1200); }
+
+  function start(){
+    $('#gate').style.display='none'; $('#main').style.display='block';
+    sessionStorage.setItem(STORE+'-code', CODE);
+    var local = {}; try{ local = JSON.parse(localStorage.getItem(STORE)||'{}'); }catch(e){}
+    restore(local);
+    fetch(API+'/data?slug='+SLUG+'&code='+encodeURIComponent(CODE)).then(function(r){ return r.json(); })
+      .then(function(j){ if (j.answers) { var merged = Object.assign({}, j.answers, local); restore(merged); } }).catch(function(){});
+    $$('textarea').forEach(function(t){ t.addEventListener('input', function(){ grow(t); queue(); }); });
+    $$('input[data-k]').forEach(function(i){ i.addEventListener('change', queue); });
+    $('#saveBtn').addEventListener('click', function(){ save(true); });
+  }
+  function tryCode(c){
+    c = (c||'').trim().toUpperCase(); if(!c) return;
+    fetch(API+'/data?slug='+SLUG+'&code='+encodeURIComponent(c)).then(function(r){
+      if (r.ok) { CODE=c; start(); } else { $('#gateErr').textContent = 'not that one'; }
+    }).catch(function(){ $('#gateErr').textContent = 'no connection — try again'; });
+  }
+  $('#gateBtn').addEventListener('click', function(){ tryCode($('#gateCode').value); });
+  $('#gateCode').addEventListener('keydown', function(e){ if(e.key==='Enter') tryCode($('#gateCode').value); });
+  if (CODE) tryCode(CODE);
+})();
+</script>
+</body>
+</html>
