@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DAIJON — 2 minutes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#111111;--paper:#FAFAF6;--acid:#FF4D00;--hair:rgba(17,17,17,.18)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:"Space Mono","Courier New",monospace;font-size:14px;line-height:1.6}
+  .wrap{max-width:680px;margin:0 auto;padding:60px 32px 110px}
+  @media(max-width:640px){.wrap{padding:40px 18px 90px}}
+  .kicker{font-size:11px;letter-spacing:4px;color:var(--acid);margin-bottom:14px}
+  h1{font-family:"Archivo Black",sans-serif;font-size:clamp(40px,9vw,80px);line-height:.9;letter-spacing:-2px;text-transform:uppercase}
+  h1 em{font-style:normal;color:var(--acid)}
+  .intro{margin-top:24px;border:3px solid var(--ink);padding:18px 20px;font-size:14px}
+  .intro b{color:var(--acid)}
+  .q{padding:26px 0;border-bottom:1px solid var(--hair)}
+  .q .n{font-family:"Archivo Black",sans-serif;color:var(--acid);font-size:13px;letter-spacing:2px;margin-bottom:6px}
+  .q .l{display:block;font-size:16px;line-height:1.45;margin-bottom:12px;font-weight:700}
+  .q .hint{display:block;font-size:11px;opacity:.6;margin:-8px 0 12px;letter-spacing:1px}
+  textarea{display:block;width:100%;border:2px solid var(--ink);background:#fff;color:var(--ink);
+    font-family:"Space Mono","Courier New",monospace;font-size:16px;line-height:1.5;
+    padding:12px 14px;min-height:60px;resize:none;overflow:hidden;border-radius:0}
+  textarea:focus{outline:none;border-color:var(--acid)}
+  textarea::placeholder{color:rgba(17,17,17,.35)}
+  .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .opts label{display:flex;align-items:center;gap:10px;border:2px solid var(--ink);background:#fff;padding:9px 12px;font-size:14px;cursor:pointer;line-height:1.3}
+  .opts label:has(input:checked){background:var(--ink);color:#fff}
+  .opts input{appearance:none;width:16px;height:16px;border:2px solid var(--acid);flex:none;background:#fff;border-radius:0}
+  .opts input[type=radio]{border-radius:50%}
+  .opts input:checked{background:var(--acid)}
+  .opts + textarea{margin-top:10px;min-height:52px}
+  .savebar{margin-top:50px}
+  #saveBtn{display:block;width:100%;background:var(--acid);color:#fff;border:none;cursor:pointer;
+    font-family:"Archivo Black","Arial Black",sans-serif;font-size:20px;text-transform:uppercase;letter-spacing:1px;padding:20px;border-radius:0}
+  #saveBtn:active{background:var(--ink)}
+  #saveStatus{margin-top:12px;font-size:12px;letter-spacing:1px;color:var(--acid);min-height:20px;text-align:center}
+  .privnote{margin-top:30px;border:3px solid var(--acid);padding:14px 18px;font-size:12px;color:var(--acid);font-weight:700}
+  .foot{margin-top:50px;border-top:3px solid var(--ink);padding-top:12px;font-size:10px;letter-spacing:2px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  #gate{position:fixed;inset:0;background:var(--paper);z-index:10;display:flex;align-items:center;justify-content:center;padding:24px}
+  #gate .box{width:100%;max-width:420px}
+  #gate h1{font-size:clamp(40px,9vw,64px);margin-bottom:26px}
+  #gateCode{display:block;width:100%;border:3px solid var(--ink);background:#fff;color:var(--ink);
+    font-family:"Space Mono",monospace;font-size:20px;letter-spacing:5px;text-transform:uppercase;padding:16px;text-align:center;border-radius:0}
+  #gateCode:focus{outline:none;border-color:var(--acid)}
+  #gateBtn{display:block;width:100%;margin-top:14px;background:var(--ink);color:#fff;border:none;cursor:pointer;
+    font-family:"Archivo Black",sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:2px;padding:16px;border-radius:0}
+  #gateBtn:active{background:var(--acid)}
+  #gateErr{margin-top:12px;font-size:12px;letter-spacing:1px;color:var(--acid);min-height:18px;text-align:center}
+  #main{display:none}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="box">
+    <div class="kicker">PRIVATE — FOR DAIJON</div>
+    <h1>Daijon<br><em>2 mins</em></h1>
+    <input id="gateCode" type="text" placeholder="PASSCODE" autocomplete="off" autocapitalize="characters">
+    <button id="gateBtn">Enter</button>
+    <div id="gateErr"></div>
+  </div>
+</div>
+
+<div id="main"><div class="wrap">
+  <div class="kicker">DAIJON · FROM ALEX · 7 QUESTIONS · 2 MINS</div>
+  <h1>What's on the <em>shared</em> account?</h1>
+  <div class="intro">
+    Seven quick ones about the iCloud you share with your mum, so we can
+    figure out how to get you set up with your own — without either of you
+    losing anything. Tick what's true, type a line where you fancy.
+    <b>Saves as you go.</b> Once you're done I'll put together the actual
+    steps for splitting it safely.
+  </div>
+
+  <div class="q">
+    <div class="n">01</div>
+    <span class="l">What's actually shared or synced on this account right now?</span>
+    <span class="hint">TICK ANY</span>
+    <div class="opts">
+      <label><input type="checkbox" data-k="r1_shared" value="photos & videos">photos &amp; videos</label>
+      <label><input type="checkbox" data-k="r1_shared" value="contacts">contacts</label>
+      <label><input type="checkbox" data-k="r1_shared" value="calendar">calendar</label>
+      <label><input type="checkbox" data-k="r1_shared" value="notes">notes</label>
+      <label><input type="checkbox" data-k="r1_shared" value="iMessage / texts">iMessage / texts</label>
+      <label><input type="checkbox" data-k="r1_shared" value="purchased apps & subscriptions">purchased apps &amp; subscriptions</label>
+      <label><input type="checkbox" data-k="r1_shared" value="passwords (keychain)">passwords (keychain)</label>
+      <label><input type="checkbox" data-k="r1_shared" value="Find My / location">Find My / location</label>
+      <label><input type="checkbox" data-k="r1_shared" value="storage plan">storage plan</label>
+      <label><input type="checkbox" data-k="r1_shared" value="other">other</label>
+    </div>
+    <textarea data-k="r1_shared_other" placeholder="if other — what?"></textarea>
+  </div>
+
+  <div class="q">
+    <div class="n">02</div>
+    <span class="l">Whose devices are actually signed into it, that you know of?</span>
+    <textarea data-k="r1_devices" placeholder="e.g. my phone, mum's phone, an old iPad..."></textarea>
+  </div>
+
+  <div class="q">
+    <div class="n">03</div>
+    <span class="l">Has your mum been part of this conversation yet?</span>
+    <div class="opts">
+      <label><input type="radio" name="r1_mum_aware" data-k="r1_mum_aware" value="yeah, she knows and we're on the same page">yeah, she knows and we're on the same page</label>
+      <label><input type="radio" name="r1_mum_aware" data-k="r1_mum_aware" value="not yet, haven't brought it up">not yet, haven't brought it up</label>
+      <label><input type="radio" name="r1_mum_aware" data-k="r1_mum_aware" value="brought it up, it's a bit tricky">brought it up, it's a bit tricky</label>
+      <label><input type="radio" name="r1_mum_aware" data-k="r1_mum_aware" value="other">other</label>
+    </div>
+    <textarea data-k="r1_mum_aware_other" placeholder="if other — what's going on?"></textarea>
+  </div>
+
+  <div class="q">
+    <div class="n">04</div>
+    <span class="l">What matters most to keep safe when you move across?</span>
+    <span class="hint">TICK UP TO THREE</span>
+    <div class="opts">
+      <label><input type="checkbox" data-k="r1_keep" value="photos & videos">photos &amp; videos</label>
+      <label><input type="checkbox" data-k="r1_keep" value="contacts">contacts</label>
+      <label><input type="checkbox" data-k="r1_keep" value="iMessage history">iMessage history</label>
+      <label><input type="checkbox" data-k="r1_keep" value="WhatsApp backup">WhatsApp backup</label>
+      <label><input type="checkbox" data-k="r1_keep" value="purchased apps & subscriptions">purchased apps &amp; subscriptions</label>
+      <label><input type="checkbox" data-k="r1_keep" value="passwords">passwords</label>
+      <label><input type="checkbox" data-k="r1_keep" value="notes">notes</label>
+      <label><input type="checkbox" data-k="r1_keep" value="calendar">calendar</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="n">05</div>
+    <span class="l">Do you already have a new Apple ID / email ready for your own account?</span>
+    <div class="opts">
+      <label><input type="radio" name="r1_new_id" data-k="r1_new_id" value="yeah, got one ready">yeah, got one ready</label>
+      <label><input type="radio" name="r1_new_id" data-k="r1_new_id" value="need to make one">need to make one</label>
+      <label><input type="radio" name="r1_new_id" data-k="r1_new_id" value="not sure what I need">not sure what I need</label>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="n">06</div>
+    <span class="l">Anything on there that's actually yours — paid storage, subscriptions, purchases — separate from your mum's stuff?</span>
+    <textarea data-k="r1_paid_stuff" placeholder="free text, or 'not sure'"></textarea>
+  </div>
+
+  <div class="q">
+    <div class="n">07</div>
+    <span class="l">Any deadline on this — a date you'd want to be sorted by?</span>
+    <textarea data-k="r1_deadline" placeholder="e.g. before the move, no rush, etc"></textarea>
+  </div>
+
+  <div class="savebar">
+    <button id="saveBtn">Done — send to Alex</button>
+    <div id="saveStatus"></div>
+  </div>
+  <div class="privnote">Private between you and Alex. Saves automatically; come back any time with the same code.</div>
+  <div class="foot"><span>DAIJON · ROUND 1</span><span>ALEX · AUG 2026</span></div>
+</div></div>
+
+<script>
+(function(){
+  var API = 'https://xzokqdhtkczxduxmtpbk.supabase.co/functions/v1/questionnaire';
+  var SLUG = 'daijon', STORE = 'daijon-r1';
+  var CODE = (new URLSearchParams(location.search).get('code') || sessionStorage.getItem(STORE+'-code') || '').toUpperCase();
+  var $ = function(s,el){ return (el||document).querySelector(s); };
+  var $$ = function(s,el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); };
+  function collect(){
+    var out = {};
+    $$('textarea[data-k]').forEach(function(t){ out[t.dataset.k] = t.value; });
+    var groups = {};
+    $$('input[data-k]').forEach(function(i){ var k=i.dataset.k; groups[k]=groups[k]||[]; if(i.checked) groups[k].push(i.value); });
+    Object.keys(groups).forEach(function(k){ out[k] = groups[k].join(' | '); });
+    return out;
+  }
+  function restore(a){
+    Object.keys(a).forEach(function(k){
+      var v = a[k] || '';
+      $$('textarea[data-k="'+k+'"]').forEach(function(t){ t.value=v; grow(t); });
+      var vals = v.split(' | ');
+      $$('input[data-k="'+k+'"]').forEach(function(i){ i.checked = vals.indexOf(i.value) >= 0; });
+    });
+  }
+  function grow(t){ t.style.height='auto'; t.style.height=(t.scrollHeight+4)+'px'; }
+  var timer=null, status=$('#saveStatus');
+  function save(manual){
+    var data = collect(); data.r1_submitted = manual ? new Date().toISOString() : (data.r1_submitted||'');
+    localStorage.setItem(STORE, JSON.stringify(data));
+    status.textContent = 'saving…';
+    return fetch(API+'/save', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({code:CODE, slug:SLUG, answers:data})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ status.textContent = j.ok ? (manual ? 'sent — cheers ✓' : 'saved ✓') : 'could not save — check connection'; })
+      .catch(function(){ status.textContent = 'offline — kept on this device, will retry'; });
+  }
+  function queue(){ clearTimeout(timer); timer = setTimeout(function(){ save(false); }, 1200); }
+  function start(){
+    $('#gate').style.display='none'; $('#main').style.display='block';
+    sessionStorage.setItem(STORE+'-code', CODE);
+    var local = {}; try{ local = JSON.parse(localStorage.getItem(STORE)||'{}'); }catch(e){}
+    restore(local);
+    fetch(API+'/data?slug='+SLUG+'&code='+encodeURIComponent(CODE)).then(function(r){ return r.json(); })
+      .then(function(j){ if (j.answers) restore(Object.assign({}, j.answers, local)); }).catch(function(){});
+    $$('textarea').forEach(function(t){ t.addEventListener('input', function(){ grow(t); queue(); }); });
+    $$('input[data-k]').forEach(function(i){ i.addEventListener('change', function(){
+      if (i.dataset.k==='r1_keep') { var on = $$('input[data-k="r1_keep"]:checked'); if (on.length>3) { i.checked=false; return; } }
+      queue();
+    }); });
+    $('#saveBtn').addEventListener('click', function(){ save(true); });
+  }
+  function tryCode(c){
+    c = (c||'').trim().toUpperCase(); if(!c) return;
+    fetch(API+'/data?slug='+SLUG+'&code='+encodeURIComponent(c)).then(function(r){
+      if (r.ok) { CODE=c; start(); } else { $('#gateErr').textContent = 'not that one'; }
+    }).catch(function(){ $('#gateErr').textContent = 'no connection — try again'; });
+  }
+  $('#gateBtn').addEventListener('click', function(){ tryCode($('#gateCode').value); });
+  $('#gateCode').addEventListener('keydown', function(e){ if(e.key==='Enter') tryCode($('#gateCode').value); });
+  if (CODE) tryCode(CODE);
+})();
+</script>
+</body>
+</html>
